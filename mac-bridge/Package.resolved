@@ -1,5 +1,5 @@
 {
-  "originHash" : "29750edec33515d40621cc2bb22d170211ff865e02302dfdff0fceb9b93fa48e",
+  "originHash" : "d6975862dc9d86a529f65c52292d1d2437ce7c2461bf3d050fb056863adb0f54",
   "pins" : [
     {
       "identity" : "apnswift",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/EFPrefix/EFQRCode.git",
       "state" : {
-        "revision" : "3a6c5012f1a0df404a92e55bb01b4b685ff5a2d1",
-        "version" : "6.2.2"
+        "revision" : "07ff9e2e83a4bbd384e5a8e33b47f389c9aac762",
+        "version" : "7.0.3"
       }
     },
     {
@@ -278,6 +278,15 @@
       "state" : {
         "revision" : "d1605333f7edac39b4518538ef4f2638fdd2e4d6",
         "version" : "2.3.1"
+      }
+    },
+    {
+      "identity" : "swiftdraw",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/SwiftDraw.git",
+      "state" : {
+        "revision" : "a19594794cdcdee5135caad3bc119096c50c92c2",
+        "version" : "0.22.0"
       }
     },
     {

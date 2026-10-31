@@ -13,7 +13,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.92.0"),
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.29.0"),
-        .package(url: "https://github.com/EFPrefix/EFQRCode.git", from: "6.2.0"),
+        .package(url: "https://github.com/EFPrefix/EFQRCode.git", from: "7.0.3"),
         .package(url: "https://github.com/swift-server-community/APNSwift.git", from: "5.0.0")
     ],
     targets: [
