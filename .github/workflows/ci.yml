@@ -88,7 +88,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: swift --version && xcodebuild -version
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: mac-bridge/.build
           key: spm-${{ runner.os }}-${{ hashFiles('mac-bridge/Package.resolved') }}
