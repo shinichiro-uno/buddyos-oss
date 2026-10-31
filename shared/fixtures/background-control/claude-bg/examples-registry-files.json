@@ -1,0 +1,292 @@
+{
+ "daemon_lock": {
+  "pid": 60029,
+  "version": "2.1.170",
+  "jsonPath": "/Users/me/.claude/daemon.json",
+  "logPath": "/Users/me/.claude/daemon.log",
+  "startedAt": 1781209548214,
+  "origin": "transient",
+  "spawnedBy": {
+   "label": "claude",
+   "cwd": "/Users/me/develope/BuddyOS",
+   "pid": 20834
+  },
+  "procStart": "Thu Jun 11 20:25:40 2026",
+  "launchTarget": "/Users/me/.npm-global/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe"
+ },
+ "daemon_roster": {
+  "proto": 1,
+  "supervisorPid": 31053,
+  "updatedAt": 1792581986674,
+  "workers": {
+   "dceba663": {
+    "pid": 31283,
+    "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+    "rendezvousSock": "/tmp/cc-daemon-503/b3b0d0a1/rv/dceba663.sock",
+    "ptySock": "/tmp/cc-daemon-503/b3b0d0a1/spare/22789f61.pty.sock",
+    "cliVersion": "2.1.300",
+    "startedAt": 1792581986631,
+    "attempt": 1,
+    "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+    "dispatch": {
+     "proto": 1,
+     "short": "dceba663",
+     "nonce": "d709d2c0",
+     "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+     "createdAt": 1792581981329,
+     "source": "shell",
+     "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+     "launch": {
+      "mode": "prompt",
+      "args": [
+       "--session-id",
+       "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+       "--model",
+       "haiku",
+       "--setting-sources",
+       "project,local",
+       "--allowedTools",
+       "Bash(sleep *),Bash(echo *)",
+       "--",
+       "count slowly from 1 to 5, one number every 10 seconds using sleep, then say done"
+      ],
+      "restoresTranscript": false
+     },
+     "env": {},
+     "isolation": "none",
+     "respawnFlags": [],
+     "seed": {
+      "intent": "count slowly from 1 to 5, one number every 10 seconds using sleep, then say done"
+     }
+    },
+    "decModes": [],
+    "rvAuth": "<redacted>",
+    "ptyAuth": "<redacted>"
+   }
+  }
+ },
+ "sessions_bg_busy": {
+  "pid": 31875,
+  "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+  "startedAt": 1792582012126,
+  "procStart": "Wed Oct 21 11:26:43 2026",
+  "version": "2.1.300",
+  "peerProtocol": 1,
+  "peerFeatures": [
+   "notify_idle",
+   "reply_across_default_dirs",
+   "artifact_yield"
+  ],
+  "kind": "bg",
+  "entrypoint": "cli",
+  "pidDomain": "darwin",
+  "messagingSocketPath": "/tmp/cc-socks/31875.sock",
+  "name": "count slowly from 1 to 5, one number every 10 seconds using sleep, then say done",
+  "nameSince": 1792582012126,
+  "jobId": "dceba663",
+  "status": "busy",
+  "updatedAt": 1792582013608,
+  "statusUpdatedAt": 1792582013608
+ },
+ "job_state_done": {
+  "state": "done",
+  "detail": "counted 1-5 with 10s sleeps; finished in ~40s",
+  "tempo": "idle",
+  "inFlight": {
+   "tasks": 0,
+   "queued": 0,
+   "kinds": [],
+   "drainableMonitors": 0
+  },
+  "tokens": 311,
+  "output": {
+   "result": "Counted 1 through 5 at 10-second intervals using sleep, then reported done."
+  },
+  "children": null,
+  "linkScanOffset": 405314,
+  "linkScanPath": "/Users/me/.claude/projects/-tmp-fixture-claude-bg-sessions-cwd-bgA/dceba663-6fad-4d6f-8410-2ce7d7b0c50f.jsonl",
+  "template": "bg",
+  "respawnFlags": [],
+  "intent": "count slowly from 1 to 5, one number every 10 seconds using sleep, then say done",
+  "name": "count 1-5 with sleep",
+  "nameSource": "auto",
+  "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+  "resumeSessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+  "daemonShort": "dceba663",
+  "cliVersion": "2.1.300",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+  "providerEnv": {},
+  "backend": "daemon",
+  "createdAt": "2026-10-21T11:26:21.328Z",
+  "updatedAt": "2026-10-21T11:27:49.096Z",
+  "firstTerminalAt": "2026-10-21T11:27:49.096Z",
+  "lastTerminalAt": "2026-10-21T11:27:49.096Z"
+ },
+ "sessions_dash_p_sdk_cli_busy": {
+  "pid": 40477,
+  "sessionId": "416ae8b3-ea15-4e7d-b0ad-ee33006b5d2d",
+  "cwd": "/Users/me",
+  "startedAt": 1792582236944,
+  "procStart": "Wed Oct 21 11:30:36 2026",
+  "version": "2.1.300",
+  "peerProtocol": 1,
+  "peerFeatures": [
+   "notify_idle",
+   "reply_across_default_dirs",
+   "artifact_yield"
+  ],
+  "kind": "interactive",
+  "entrypoint": "sdk-cli",
+  "pidDomain": "darwin",
+  "messagingSocketPath": "/tmp/cc-socks/40477.sock",
+  "name": "me-da",
+  "nameSource": "derived",
+  "nameSince": 1792582236945,
+  "status": "busy",
+  "updatedAt": 1792582237455,
+  "statusUpdatedAt": 1792582237455
+ },
+ "job_state_blocked": {
+  "state": "working",
+  "detail": "starting…",
+  "tempo": "blocked",
+  "output": null,
+  "children": null,
+  "linkScanOffset": 0,
+  "template": "bg",
+  "respawnFlags": [],
+  "providerEnv": {},
+  "intent": "Use the Write tool to create a file named hello.txt in the current directory containing the word hi.",
+  "sessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "resumeSessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "daemonShort": "bb74b880",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgB",
+  "createdAt": "2026-10-21T11:32:56.338Z",
+  "updatedAt": "2026-10-21T11:33:00.113Z",
+  "firstTerminalAt": null,
+  "backend": "daemon",
+  "inFlight": {
+   "tasks": 0,
+   "queued": 0,
+   "kinds": [],
+   "drainableMonitors": 0
+  },
+  "needs": "approve Write: /tmp/fixture/claude-bg-sessions/cwd/bgB/hello.txt"
+ },
+ "sessions_bg_waiting": {
+  "pid": 31436,
+  "sessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgB",
+  "startedAt": 1792582377137,
+  "procStart": "Wed Oct 21 11:26:29 2026",
+  "version": "2.1.300",
+  "peerProtocol": 1,
+  "peerFeatures": [
+   "notify_idle",
+   "reply_across_default_dirs",
+   "artifact_yield"
+  ],
+  "kind": "bg",
+  "entrypoint": "cli",
+  "pidDomain": "darwin",
+  "messagingSocketPath": "/tmp/cc-socks/31436.sock",
+  "name": "Use the Write tool to create a file named hello.txt in the current directory containing the word hi.",
+  "nameSince": 1792582377138,
+  "jobId": "bb74b880",
+  "status": "waiting",
+  "updatedAt": 1792582380107,
+  "statusUpdatedAt": 1792582380107,
+  "waitingFor": "permission prompt"
+ },
+ "job_state_stopped": {
+  "state": "stopped",
+  "detail": "stopped",
+  "tempo": "idle",
+  "output": null,
+  "children": null,
+  "linkScanOffset": 165085,
+  "template": "bg",
+  "respawnFlags": [],
+  "providerEnv": {},
+  "intent": "Use the Write tool to create a file named hello.txt in the current directory containing the word hi.",
+  "sessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "resumeSessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "daemonShort": "bb74b880",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgB",
+  "createdAt": "2026-10-21T11:32:56.338Z",
+  "updatedAt": "2026-10-21T11:34:48.244Z",
+  "firstTerminalAt": "2026-10-21T11:34:48.170Z",
+  "lastTerminalAt": "2026-10-21T11:34:48.170Z",
+  "backend": "daemon",
+  "linkScanPath": "/Users/me/.claude/projects/-tmp-fixture-claude-bg-sessions-cwd-bgB/bb74b880-d7c9-4099-9378-fbbbe9b9bed5.jsonl",
+  "inFlight": {
+   "tasks": 0,
+   "queued": 0,
+   "kinds": [],
+   "drainableMonitors": 0
+  }
+ },
+ "job_state_failed_before_init": {
+  "state": "failed",
+  "detail": "exit 1 before init — Error creating worktree: Workspace trust not yet accepted. Run `claude` once in this directory and accept the trust dialog, then retry with --worktree.",
+  "tempo": "idle",
+  "output": null,
+  "children": null,
+  "linkScanOffset": 0,
+  "template": "bg",
+  "respawnFlags": [],
+  "providerEnv": {},
+  "intent": "Use the Write tool to create a file named wt.txt containing the word hi, then reply done.",
+  "sessionId": "26107a74-e75a-4dcd-b559-ded0af972555",
+  "resumeSessionId": "26107a74-e75a-4dcd-b559-ded0af972555",
+  "daemonShort": "26107a74",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/wtrepo",
+  "createdAt": "2026-10-21T11:43:25.442Z",
+  "updatedAt": "2026-10-21T11:43:26.599Z",
+  "firstTerminalAt": "2026-10-21T11:43:26.599Z",
+  "backend": "daemon",
+  "lastTerminalAt": "2026-10-21T11:43:26.599Z"
+ },
+ "job_state_working_with_inflight_task": {
+  "state": "working",
+  "detail": "Sleeping for 90 seconds",
+  "tempo": "active",
+  "inFlight": {
+   "tasks": 1,
+   "queued": 0,
+   "kinds": [
+    "local_bash"
+   ],
+   "drainableMonitors": 0
+  },
+  "tokens": 99,
+  "output": null,
+  "children": null,
+  "linkScanOffset": 172416,
+  "linkScanPath": "/Users/me/.claude/projects/-tmp-fixture-claude-bg-sessions-cwd-bgD/45221487-9c4c-4592-83bd-5b2006e65854.jsonl",
+  "template": "bg",
+  "respawnFlags": [],
+  "providerEnv": {},
+  "intent": "Run the Bash command: sleep 90   Then reply with exactly the single word finished.",
+  "name": "sleep 90 command wait",
+  "nameSource": "auto",
+  "sessionId": "45221487-9c4c-4592-83bd-5b2006e65854",
+  "resumeSessionId": "45221487-9c4c-4592-83bd-5b2006e65854",
+  "daemonShort": "45221487",
+  "cliVersion": "2.1.300",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgD",
+  "createdAt": "2026-10-21T11:45:27.764Z",
+  "updatedAt": "2026-10-21T11:45:36.951Z",
+  "firstTerminalAt": null,
+  "backend": "daemon",
+  "fan": [
+   {
+    "id": "b8ghuqeuv",
+    "kind": "shell",
+    "label": "sleep 90",
+    "startedAt": 1792583136905
+   }
+  ]
+ }
+}

@@ -1,0 +1,36 @@
+# Swift
+.build/
+.swiftpm/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+
+# Node
+node_modules/
+windows-bridge/dist/
+
+# macOS
+.DS_Store
+
+# Logs / runtime
+*.log
+/tmp/
+
+# Secrets — the bridges keep keys under ~/.buddyos/ (or %LOCALAPPDATA%\BuddyOS), never in the repo
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.pem
+*.cer
+*.key
+*.mobileprovision
+*.keystore
+*.jks
+
+# Local tooling caches (AI assistants, MCP servers, spec tools)
+.claude/
+.serena/
+.playwright-mcp/
+.kiro/

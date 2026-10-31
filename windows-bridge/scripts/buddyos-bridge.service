@@ -1,0 +1,50 @@
+# BuddyOS Windows Bridge: systemd user unit (WSL2 / Linux 常駐用テンプレート)
+#
+# これは install-linux.sh が __PLACEHOLDER__ を実パスへ置換してから
+#   ~/.config/systemd/user/buddyos-bridge.service
+# へ配置するための「ひな形」です。直接このファイルを編集して使うこともできますが、
+# その場合は ExecStart / WorkingDirectory の __WINDOWS_BRIDGE_DIR__ を
+# windows-bridge の絶対パスに、__NODE_BIN__ を node の絶対パス (`which node`) に
+# 手で書き換えてください。
+#
+# Mac の launchd (KeepAlive + RunAtLoad) と同じく「単一常駐 + 自動再起動」を狙う構成。
+# launchd と違い、systemd のログは journald が受け取り自動でローテーション/上限管理する
+# ため、ファイルローテーション用のスクリプトは不要です (ログ確認は journalctl --user)。
+
+[Unit]
+Description=BuddyOS Windows Bridge (Node WebSocket bridge for the BuddyOS iOS app)
+Documentation=https://github.com/shinichiro-uno/BuddyOS
+# ネットワークが上がってから起動 (Paseo 中継への接続に必要。待ち受けは 127.0.0.1 だけ)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# dist/index.js は事前に `npm run build` でビルドしておく (install-linux.sh が実行)。
+# node はフルパスで指定する。WSL では PATH 継承が不安定なため __NODE_BIN__ を解決して埋め込む。
+ExecStart=__NODE_BIN__ __WINDOWS_BRIDGE_DIR__/dist/index.js
+WorkingDirectory=__WINDOWS_BRIDGE_DIR__
+
+# クラッシュ・正常終了どちらでも再起動 (launchd の KeepAlive 相当)
+Restart=always
+# 再起動ループを 10 秒間隔に抑える (launchd の ThrottleInterval=10 相当)
+RestartSec=10
+
+# 必要なら環境変数をここで上書きできる (config.ts の env 名に対応):
+#   Environment=BUDDYOS_BRIDGE_PORT=8765
+#   Environment=BUDDYOS_HERMES_MODE=auto
+#   Environment=BUDDYOS_CLAUDE_MODE=auto
+# .env ファイルから読み込みたい場合 (任意・存在しなくてもエラーにしない):
+#   EnvironmentFile=-%h/.config/buddyos-bridge.env
+
+# stdout/stderr は journald へ。`journalctl --user -u buddyos-bridge` で参照でき、
+# サイズ/期間に応じて journald が自動ローテートする。
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=buddyos-bridge
+
+[Install]
+# `systemctl --user enable` でログイン時に自動起動する。
+# 起動を「ログイン中だけ」でなく「ブート時から」にしたい場合は README の
+# `loginctl enable-linger` の項を参照。
+WantedBy=default.target

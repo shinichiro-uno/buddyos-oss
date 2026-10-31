@@ -1,0 +1,17 @@
+BuddyOS Bridge and Protocol
+Copyright 2026 The BuddyOS Authors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product depends on third-party software under their own licenses.
+See THIRD_PARTY_NOTICES.md for the list and the license texts.
+
+The documents in spec/ are licensed under the Creative Commons Attribution 4.0
+International License (CC-BY-4.0).
+
+The BuddyOS name, logos, icons and mascot are NOT licensed under the Apache
+License (see section 6 of the license). See TRADEMARKS.md.
+
+Claude, Claude Code, Codex, OpenCode, Antigravity, Grok, Cursor and the names
+of other agents or services mentioned in this repository are trademarks of
+their respective owners. This project is not affiliated with or endorsed by them.

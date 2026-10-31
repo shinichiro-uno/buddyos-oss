@@ -1,0 +1,3 @@
+{"timestamp":"2026-10-01T09:01:00.000Z","type":"session_meta","payload":{"id":"0199a1b2-0000-7000-8000-000000000003","timestamp":"2026-10-01T09:01:00.000Z","cwd":"/home/user/projects/sample-app","originator":"codex_cli_rs","cli_version":"0.50.0","source":{"subagent":{"thread_spawn":{"parent_thread_id":"0199a1b2-0000-7000-8000-000000000001","depth":1}}},"model_provider":"openai"}}
+{"timestamp":"2026-10-01T09:01:01.000Z","type":"event_msg","payload":{"type":"user_message","message":"テストの失敗を調べて","images":[]}}
+{"timestamp":"2026-10-01T09:01:02.000Z","type":"event_msg","payload":{"type":"agent_message","message":"失敗はありません。"}}

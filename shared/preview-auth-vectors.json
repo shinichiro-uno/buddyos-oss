@@ -1,0 +1,160 @@
+{
+  "comment": "プレビューの認証と Origin / Host の関門（docs/PREVIEW_AUTH_2026-10-12.md）の相互運用ベクタ。mac-bridge（PreviewAuthVectorTests.swift）・windows-bridge（previewAuthVectors.test.ts）・desktop（previewAuthVectors.test.ts）のテストが読む。値を変えるときは文書と 3 実装を一緒に直すこと。host / origin の各要素は、そのヘッダの全部の行（無ければ空の配列）。",
+  "desktopOrigin": "buddyos-desktop://app",
+  "host": {
+    "allow": [
+      ["127.0.0.1:8765"],
+      ["127.0.0.1"],
+      ["localhost:51234"],
+      ["LOCALHOST"],
+      ["[::1]:8765"],
+      ["127.0.0.1:61000"]
+    ],
+    "deny": [
+      [],
+      [""],
+      ["evil.example:8765"],
+      ["127.0.0.1.evil.example:8765"],
+      ["127.0.0.1.nip.io:8765"],
+      ["evil.localhost:8765"],
+      ["localhost.:8765"],
+      ["127.0.0.2:8765"],
+      ["[::2]:8765"],
+      ["127.0.0.1:99999"],
+      ["127.0.0.1:"],
+      ["127.0.0.1:abc"],
+      ["127.0.0.1:80:80"],
+      ["127.0.0.1:8765", "evil.example"],
+      ["127.0.0.1:8765", "127.0.0.1:8765"]
+    ]
+  },
+  "origin": {
+    "allow": [
+      [],
+      ["buddyos-desktop://app"]
+    ],
+    "deny": [
+      [""],
+      ["null"],
+      ["http://localhost:8765"],
+      ["http://127.0.0.1:8765"],
+      ["http://localhost:3000"],
+      ["file://"],
+      ["https://example.com"],
+      ["buddyos-desktop://app/"],
+      ["BUDDYOS-DESKTOP://APP"],
+      ["buddyos-desktop://app", "null"]
+    ]
+  },
+  "paths": {
+    "comment": "sessionAuth = Origin の関門をかけない（プレビューのセッションで認証する）ルート。guarded = Origin の関門をかける。Host はどちらも見る。",
+    "sessionAuth": [
+      "/preview/ui",
+      "/preview/ui?s=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "/preview/sim/stream",
+      "/preview/sim/tap",
+      "/preview/sim/swipe",
+      "/preview/w/abc",
+      "/preview/w/abc/",
+      "/preview/w/abc/assets/app.js"
+    ],
+    "guarded": [
+      "/",
+      "/preview",
+      "/preview/",
+      "/preview/session",
+      "/preview/targets",
+      "/preview/sim/frame",
+      "/preview/sim/home",
+      "/preview/sim/text",
+      "/preview/web/5173",
+      "/preview/web/5173/",
+      "/preview/w",
+      "/preview/ui/x",
+      "/ws/agent/claude",
+      "/terminal/pty",
+      "/health",
+      "/claude/hook",
+      "/xpreview/ui"
+    ]
+  },
+  "targets": {
+    "comment": "POST /preview/session の target。param は正規化した値（Bridge が返す target）。Windows は sim を扱わず、sim も invalid_target（400）にする。",
+    "valid": [
+      { "raw": "web:5173", "param": "web:5173" },
+      { "raw": "web:1", "param": "web:1" },
+      { "raw": "web:65535", "param": "web:65535" },
+      { "raw": "web:08080", "param": "web:8080" },
+      { "raw": "sim:7F3C2A10-1B2C-4D5E-8F90-0123456789AB", "param": "sim:7F3C2A10-1B2C-4D5E-8F90-0123456789AB" },
+      { "raw": "sim:7f3c2a10-1b2c-4d5e-8f90-0123456789ab", "param": "sim:7F3C2A10-1B2C-4D5E-8F90-0123456789AB" }
+    ],
+    "invalid": [
+      "",
+      "5173",
+      "web:",
+      "web:0",
+      "web:65536",
+      "web:-1",
+      "web:+80",
+      "web: 80",
+      "web:5173 ",
+      "web:1e3",
+      "web:123456",
+      "WEB:5173",
+      "sim:",
+      "sim:booted",
+      "sim:7F3C2A101B2C4D5E8F900123456789AB",
+      "sim:{7F3C2A10-1B2C-4D5E-8F90-0123456789AB}",
+      "sim:../../tmp/x"
+    ]
+  },
+  "session": {
+    "tokenLength": 43,
+    "idleTTLSeconds": 7200,
+    "absoluteTTLSeconds": 43200,
+    "maxSessions": 64,
+    "wellFormed": [
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "q2X9-_abcdefghijklmnopqrstuvwxyz0123456789Z"
+    ],
+    "malformed": [
+      "",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
+    ]
+  },
+  "routes": {
+    "createSession": "/preview/session",
+    "pagePrefix": "/preview/ui?s=",
+    "sessionProxyPrefix": "/preview/w/",
+    "bearerProxyPrefix": "/preview/web/"
+  },
+  "errors": {
+    "forbiddenHost": "forbidden_host",
+    "forbiddenOrigin": "forbidden_origin",
+    "unauthorized": "unauthorized",
+    "invalidTarget": "invalid_target",
+    "portNotAllowed": "port_not_allowed"
+  },
+  "iframeSandbox": "allow-scripts allow-forms allow-popups allow-modals allow-downloads",
+  "proxySandboxPolicy": "sandbox allow-scripts allow-forms allow-popups allow-modals allow-downloads",
+  "pageContentSecurityPolicy": "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'",
+  "defaultWebPorts": [3000, 5173, 8080, 4321, 19006, 8081],
+  "locationRewrite": [
+    { "location": "/login", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/login" },
+    { "location": "/", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/" },
+    { "location": "//cdn.example/x", "port": 5173, "prefix": "/preview/w/S", "expected": "//cdn.example/x" },
+    { "location": "/preview/w/S/login", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/login" },
+    { "location": "http://127.0.0.1:5173/a?b=1#c", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/a?b=1#c" },
+    { "location": "http://localhost:5173/a", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/a" },
+    { "location": "http://[::1]:5173/a", "port": 5173, "prefix": "/preview/w/S", "expected": "/preview/w/S/a" },
+    { "location": "http://127.0.0.1:3000/a", "port": 5173, "prefix": "/preview/w/S", "expected": "http://127.0.0.1:3000/a" },
+    { "location": "https://example.com/a", "port": 5173, "prefix": "/preview/w/S", "expected": "https://example.com/a" },
+    { "location": "next", "port": 5173, "prefix": "/preview/w/S", "expected": "next" },
+    { "location": "/login", "port": 5173, "prefix": "/preview/web/5173", "expected": "/preview/web/5173/login" }
+  ]
+}

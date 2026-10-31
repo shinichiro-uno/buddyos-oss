@@ -1,0 +1,1629 @@
+{
+ "cfg": {
+  "END_GRACE": 20,
+  "MIN_INTERVAL": 10,
+  "KEEPALIVE": 600,
+  "STALE_AFTER": 1500,
+  "DISMISS_DONE": 300,
+  "DISMISS_FAILED": 900,
+  "ENDED_MEMORY": 900
+ },
+ "cases": [
+  {
+   "name": "S1 3 agents for 5 min; app opens at 30 s and starts the activity",
+   "T": 400,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 2,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 4,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 31,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 3,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 70,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 70,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 95,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 95,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 300,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 300,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 70,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 2,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 95,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 320,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 2,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 4,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 70,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 95,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 300,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 320,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S2 short agent (8 s): no activity, no push",
+   "T": 120,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 8,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 8,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 8,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 28,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S3 one of two fails",
+   "T": 300,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 40,
+     "op": "finished",
+     "arg": {
+      "failed": 1
+     }
+    },
+    {
+     "t": 40,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 90,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 90,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 40,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 1
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 110,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "failed",
+      "running": 0,
+      "failed": 1
+     },
+     "dismissAfterSec": 900
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 40,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 1,
+     "since": 0
+    },
+    {
+     "t": 40,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 1,
+     "since": 0
+    },
+    {
+     "t": 90,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 1,
+     "since": 0
+    },
+    {
+     "t": 110,
+     "batch": "b1",
+     "phase": "failed",
+     "running": 0,
+     "failed": 1,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S4 single agent 40 min (keepalives)",
+   "T": 2500,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 20,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 1,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 2400,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 2400,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 620,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500,
+     "keepalive": true
+    },
+    {
+     "t": 1220,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500,
+     "keepalive": true
+    },
+    {
+     "t": 1820,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500,
+     "keepalive": true
+    },
+    {
+     "t": 2420,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 2400,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 2420,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S5 back-to-back agents with a 10 s gap stay in one batch",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 1,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 50,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 50,
+     "op": "counts",
+     "arg": 0
+    },
+    {
+     "t": 60,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 100,
+     "op": "finished",
+     "arg": {
+      "done": 1
+     }
+    },
+    {
+     "t": 100,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 120,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 50,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 60,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 100,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 120,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S6 counts flap every 3 s for 60 s (coalesced to 10 s)",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 20,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 23,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 26,
+     "op": "counts",
+     "arg": 4
+    },
+    {
+     "t": 29,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 32,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 35,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 38,
+     "op": "counts",
+     "arg": 4
+    },
+    {
+     "t": 41,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 44,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 47,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 50,
+     "op": "counts",
+     "arg": 4
+    },
+    {
+     "t": 53,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 56,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 59,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 62,
+     "op": "counts",
+     "arg": 4
+    },
+    {
+     "t": 65,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 68,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 71,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 74,
+     "op": "counts",
+     "arg": 4
+    },
+    {
+     "t": 77,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 90,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 20,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 3,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 30,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 2,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 40,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 4,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 53,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 2,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 63,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 4,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 73,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 2,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 110,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 20,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 23,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 26,
+     "batch": "b1",
+     "phase": "running",
+     "running": 4,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 29,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 32,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 35,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 38,
+     "batch": "b1",
+     "phase": "running",
+     "running": 4,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 41,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 44,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 47,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 50,
+     "batch": "b1",
+     "phase": "running",
+     "running": 4,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 53,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 56,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 59,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 62,
+     "batch": "b1",
+     "phase": "running",
+     "running": 4,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 65,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 68,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 71,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 74,
+     "batch": "b1",
+     "phase": "running",
+     "running": 4,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 77,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 90,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 110,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S7 count changed between local start and token: first update right away",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 3
+    },
+    {
+     "t": 15,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 17,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 3,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 80,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 17,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 2,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 100,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 3,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 15,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 80,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 100,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S8 token arrives after the batch ended: end is sent at once",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 14,
+     "op": "counts",
+     "arg": 0
+    },
+    {
+     "t": 40,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 1,
+      "shownFailed": 0
+     }
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 40,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 14,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 34,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S9 all stopped by the user",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 30,
+     "op": "finished",
+     "arg": {
+      "stopped": 2
+     }
+    },
+    {
+     "t": 30,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 50,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "stopped",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 30,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 50,
+     "batch": "b1",
+     "phase": "stopped",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S11 two iPhones: each activity is updated on its own",
+   "T": 300,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 30,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 40,
+     "op": "register",
+     "arg": {
+      "device": "d2",
+      "activityId": "a9",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 100,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 30,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 40,
+     "device": "d2",
+     "activityId": "a9",
+     "event": "update",
+     "priority": 5,
+     "state": {
+      "phase": "running",
+      "running": 1,
+      "failed": 0
+     },
+     "staleAfterSec": 1500
+    },
+    {
+     "t": 120,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    },
+    {
+     "t": 120,
+     "device": "d2",
+     "activityId": "a9",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 30,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 100,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 120,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  },
+  {
+   "name": "S12 new batch after the end: old token is not reused",
+   "T": 400,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 1,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 50,
+     "op": "counts",
+     "arg": 0
+    },
+    {
+     "t": 100,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 110,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 1,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 120,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a2",
+      "batch": "b2",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 200,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [
+    {
+     "t": 70,
+     "device": "d1",
+     "activityId": "a1",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    },
+    {
+     "t": 220,
+     "device": "d1",
+     "activityId": "a2",
+     "event": "end",
+     "priority": 10,
+     "state": {
+      "phase": "done",
+      "running": 0,
+      "failed": 0
+     },
+     "dismissAfterSec": 300
+    }
+   ],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 50,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 70,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 100,
+     "batch": "b2",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 100
+    },
+    {
+     "t": 200,
+     "batch": "b2",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 100
+    },
+    {
+     "t": 220,
+     "batch": "b2",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 100
+    }
+   ]
+  },
+  {
+   "name": "S10 user dismissed it (clear): nothing more is sent",
+   "T": 200,
+   "ids": [
+    "b1",
+    "b2",
+    "b3",
+    "b4"
+   ],
+   "steps": [
+    {
+     "t": 0,
+     "op": "counts",
+     "arg": 2
+    },
+    {
+     "t": 16,
+     "op": "register",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1",
+      "batch": "b1",
+      "shownRunning": 2,
+      "shownFailed": 0
+     }
+    },
+    {
+     "t": 30,
+     "op": "clear",
+     "arg": {
+      "device": "d1",
+      "activityId": "a1"
+     }
+    },
+    {
+     "t": 40,
+     "op": "counts",
+     "arg": 1
+    },
+    {
+     "t": 90,
+     "op": "counts",
+     "arg": 0
+    }
+   ],
+   "expectPushes": [],
+   "expectStates": [
+    {
+     "t": 0,
+     "batch": "b1",
+     "phase": "running",
+     "running": 2,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 40,
+     "batch": "b1",
+     "phase": "running",
+     "running": 1,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 90,
+     "batch": "b1",
+     "phase": "running",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    },
+    {
+     "t": 110,
+     "batch": "b1",
+     "phase": "done",
+     "running": 0,
+     "failed": 0,
+     "since": 0
+    }
+   ]
+  }
+ ]
+}

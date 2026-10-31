@@ -1,0 +1,18 @@
+{"t":0,"dir":"mark","text":"spawn","argv":["-p","--input-format","stream-json","--output-format","stream-json","--verbose","--include-partial-messages","--permission-prompt-tool","stdio","--model","haiku","--append-system-prompt","<redacted>","--setting-sources","project,local"],"pid":47921,"cwd":"/tmp/fixture/claude-stop-task/work/s0"}
+{"t":2505,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"47711198-01e9-4140-9254-98121d88e30c\",\"request\":{\"subtype\":\"stop_task\",\"task_id\":\"doesnotexist\"}}"}
+{"t":2508,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"success\",\"request_id\":\"47711198-01e9-4140-9254-98121d88e30c\",\"response\":{}}}"}
+{"t":2509,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"24910cdd-f244-48ed-93f7-0168d028c953\",\"request\":{\"subtype\":\"stop_task\"}}"}
+{"t":2510,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"error\",\"request_id\":\"24910cdd-f244-48ed-93f7-0168d028c953\",\"error\":\"stop_task: task_id must be a string\"}}"}
+{"t":2511,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"99fc3555-0265-412c-8afb-1d4a3dc1322d\",\"request\":{\"subtype\":\"stop_task\",\"task_id\":123}}"}
+{"t":2512,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"error\",\"request_id\":\"99fc3555-0265-412c-8afb-1d4a3dc1322d\",\"error\":\"stop_task: task_id must be a string\"}}"}
+{"t":2512,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"00f328e5-88fb-4b84-bc8d-29472e28f2dc\",\"request\":{\"subtype\":\"stop_task\",\"task_id\":\"\"}}"}
+{"t":2513,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"success\",\"request_id\":\"00f328e5-88fb-4b84-bc8d-29472e28f2dc\",\"response\":{}}}"}
+{"t":2514,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"4b61237f-b984-4623-a3ae-8a568245d39f\",\"request\":{\"subtype\":\"totally_unknown_subtype\"}}"}
+{"t":2515,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"error\",\"request_id\":\"4b61237f-b984-4623-a3ae-8a568245d39f\",\"error\":\"Unsupported control request subtype: totally_unknown_subtype\"}}"}
+{"t":2515,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"e1b807c8-9f22-4851-8296-a46ea741e73a\",\"request\":{\"subtype\":\"initialize\",\"perTaskStopAffordance\":true}}"}
+{"t":2525,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"fd7edcf9-d039-41bd-a524-dc4558ed8f08\",\"request\":{\"subtype\":\"stop_task\",\"task_id\":\"doesnotexist\"}}"}
+{"t":2527,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"success\",\"request_id\":\"fd7edcf9-d039-41bd-a524-dc4558ed8f08\",\"response\":{}}}"}
+{"t":2533,"dir":"in","raw":"{\"type\":\"control_request\",\"request_id\":\"b07ab32a-463d-4109-b4e2-3981f00ff205\",\"request\":{\"subtype\":\"interrupt\"}}"}
+{"t":2536,"dir":"out","raw":"{\"type\":\"control_response\",\"response\":{\"subtype\":\"success\",\"request_id\":\"b07ab32a-463d-4109-b4e2-3981f00ff205\",\"response\":{\"still_queued\":[]}}}"}
+{"t":2537,"dir":"mark","text":"finish: killing process group"}
+{"t":3288,"dir":"mark","text":"process exit code=143 signal=null"}

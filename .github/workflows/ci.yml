@@ -1,0 +1,119 @@
+# CI for the public repository. No secrets are used anywhere in this workflow, and it
+# never uses pull_request_target, so pull requests from forks run with read-only permissions.
+# Each job runs only when its own directory (or something it reads, e.g. shared/) changed.
+# Live/E2E tests that need real agent CLIs are skipped by the tests themselves unless
+# their opt-in env vars (BUDDYOS_LIVE_*, RUN_*_E2E) are set — this workflow never sets them.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      windows-bridge: ${{ steps.filter.outputs.windows-bridge }}
+      mac-bridge: ${{ steps.filter.outputs.mac-bridge }}
+      shared: ${{ steps.filter.outputs.shared }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            windows-bridge:
+              - 'windows-bridge/**'
+              - 'shared/**'
+              - '.github/workflows/ci.yml'
+            mac-bridge:
+              - 'mac-bridge/**'
+              - 'shared/**'
+              - '.github/workflows/ci.yml'
+            shared:
+              - 'shared/**'
+              - '.github/workflows/ci.yml'
+
+  windows-bridge:
+    needs: changes
+    if: needs.changes.outputs.windows-bridge == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: windows-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: windows-bridge/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+
+  shared-protocol:
+    needs: changes
+    if: needs.changes.outputs.shared == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Reference implementation self-check against the test vectors (Node >= 22.6 strips TS types).
+      - run: node --experimental-strip-types shared/tools/check-tunnel-v3.mts
+
+  mac-bridge:
+    needs: changes
+    if: needs.changes.outputs.mac-bridge == 'true' || github.event_name == 'workflow_dispatch'
+    # Package.swift needs Swift tools 6.0 and targets macOS 15.6.
+    # (macOS runners are free for public repositories.)
+    runs-on: macos-26
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: mac-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version && xcodebuild -version
+      - uses: actions/cache@v4
+        with:
+          path: mac-bridge/.build
+          key: spm-${{ runner.os }}-${{ hashFiles('mac-bridge/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+      - run: swift build --build-tests --force-resolved-versions
+      - run: swift test --skip-build --parallel
+
+  dco:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Every commit has a Signed-off-by line (DCO 1.1, see CONTRIBUTING.md)
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          missing=0
+          for c in $(git rev-list --no-merges "$BASE..$HEAD"); do
+            if ! git show -s --format=%B "$c" | grep -qE '^Signed-off-by: .+ <.+@.+>$'; then
+              echo "::error::commit $c has no Signed-off-by line (git commit --amend -s / git rebase --signoff)"
+              missing=1
+            fi
+          done
+          exit $missing

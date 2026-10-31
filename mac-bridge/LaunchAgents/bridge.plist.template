@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>__LABEL__</string>
+    <!--
+      テンプレート: scripts/setup-launchd.sh が __LABEL__ を `<ID の頭>.bridge`（BUDDYOS_ID_PREFIX、
+      無ければ Bridge に入れた既定。`BridgeApp --print-id-prefix` で分かる）に、__HOME__ を実ホームパスに置換して
+      ~/Library/LaunchAgents/__LABEL__.plist に配置する。このファイルを直接 cp しないこと。
+
+      事前ビルド済みバイナリ (~/.buddyos/bin/BridgeApp) を launchd から shell を挟まず直起動する。
+      旧: `swift run -c release` は KeepAlive 再起動のたび依存解決+差分ビルドで数秒ハングし復帰が遅い。
+      旧: `zsh -lic` 経由は launchd の cold context で .zshrc/.zprofile を全実行し
+      time-to-listen が ~12s (うち ~9s が profile 読込) になり、その間 iOS が「Bridge に
+      接続できません」を誤表示していた。→ shell を排し、起動する各エージェント
+      (claude/codex/hermes/node 等) の PATH は下の EnvironmentVariables で明示注入する。
+      launchd は $HOME を展開しないので、パスは setup-launchd.sh の置換に任せる。
+      新しい CLI を入れたらこの PATH に追記し、setup-launchd.sh を再実行すること。
+    -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/.buddyos/bin/BridgeApp</string>
+    </array>
+    <!-- TestFlight/実機の token は本番 APNs。sandbox に送ると BadDeviceToken で届かないため production を指定。 -->
+    <!-- dev 常駐ブリッジは 8764 に固定（prod アプリ supervisor は 8765）。同一 dev マシンで
+         dev ブリッジ(8764) と prod アプリ(8765) を同時に走らせてもポート衝突しないようにする。 -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>APNS_ENV</key>
+        <string>production</string>
+        <key>BUDDYOS_BRIDGE_PORT</key>
+        <string>8764</string>
+        <key>PATH</key>
+        <string>__HOME__/.npm-global/bin:__HOME__/.petclaw/node/bin:__HOME__/.local/bin:__HOME__/.bun/bin:__HOME__/.grok/bin:__HOME__/.superset/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <!-- クラッシュ時の再起動ループを 10 秒間隔に抑える -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+    <!-- ログは /tmp ではなく自分専用の ~/Library/Logs/BuddyOS（0700）に置く。/tmp の決め打ちパスは
+         別のユーザーが先にシンボリックリンクを置けば、その先へ書かされる。launchd はフォルダを作らないので、
+         setup-launchd.sh が先に mkdir -m 700 する。 -->
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/BuddyOS/bridge.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/BuddyOS/bridge.err.log</string>
+</dict>
+</plist>

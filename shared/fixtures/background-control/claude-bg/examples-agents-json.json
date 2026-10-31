@@ -1,0 +1,81 @@
+{
+ "background_live_busy": {
+  "pid": 31875,
+  "id": "dceba663",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+  "kind": "background",
+  "startedAt": 1792582012126,
+  "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+  "name": "count 1-5 with sleep",
+  "status": "busy",
+  "state": "working"
+ },
+ "background_live_waiting_permission": {
+  "pid": 31436,
+  "id": "bb74b880",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgB",
+  "kind": "background",
+  "startedAt": 1792582377137,
+  "sessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "name": "Use the Write tool to create a file named hello.txt in the current directory containing the word hi.",
+  "status": "waiting",
+  "waitingFor": "permission prompt",
+  "state": "blocked"
+ },
+ "background_live_idle_done": {
+  "pid": 31875,
+  "id": "dceba663",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgA",
+  "kind": "background",
+  "startedAt": 1792582012126,
+  "sessionId": "dceba663-6fad-4d6f-8410-2ce7d7b0c50f",
+  "name": "count 1-5 with sleep",
+  "status": "idle",
+  "state": "done"
+ },
+ "background_stopped_with_all": {
+  "id": "bb74b880",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bgB",
+  "kind": "background",
+  "startedAt": 1792582376338,
+  "sessionId": "bb74b880-d7c9-4099-9378-fbbbe9b9bed5",
+  "name": "Use the Write tool to create a file named hello.txt in the current directory containing the word hi.",
+  "state": "stopped"
+ },
+ "background_failed_before_init_with_all": {
+  "id": "26107a74",
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/wtrepo",
+  "kind": "background",
+  "startedAt": 1792583005442,
+  "sessionId": "26107a74-e75a-4dcd-b559-ded0af972555",
+  "name": "Use the Write tool to create a file named wt.txt containing the word hi, then reply done.",
+  "state": "failed"
+ },
+ "background_orphan_failed_old_job_with_all": {
+  "id": "28f38cc2",
+  "cwd": "/Users/me/develope/BuddyOS",
+  "kind": "background",
+  "startedAt": 1781209539939,
+  "sessionId": "28f38cc2-b707-41f4-9ac0-6d57cf5684f1",
+  "name": "orphan job",
+  "state": "failed"
+ },
+ "interactive_tui": {
+  "pid": 12159,
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/tui",
+  "kind": "interactive",
+  "startedAt": 1792577567327,
+  "sessionId": "2153d71c-580b-41ca-936c-b9cd6998663c",
+  "name": "tui-1",
+  "status": "idle"
+ },
+ "interactive_from_bridge_style_dash_p_stream_json_busy": {
+  "pid": 44091,
+  "cwd": "/tmp/fixture/claude-bg-sessions/cwd/bridgeP",
+  "kind": "interactive",
+  "startedAt": 1792582328277,
+  "sessionId": "07a6b13a-2207-4c0b-b28c-4d1d25373042",
+  "name": "bridgep-f1",
+  "status": "busy"
+ }
+}

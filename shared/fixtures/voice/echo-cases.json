@@ -1,0 +1,31 @@
+{
+  "_rules": [
+    "isUserSpeech(utterance, reference): 読み上げ中（と、返答の途中の考え中）に音声認識が拾った文が、人が話したものかを決める。デスクトップ（desktop/src/renderer/src/voiceText.ts）と iOS（ios/Sources/Core/VoiceConversation.swift）で同じ答えになること。",
+    "reference は「直前に読み終えた文（最大 2 文）＋いま読んでいる文の全体」。まだ読んでいない文は含めない。",
+    "正規化: 小文字にし、文字と数字だけを残す（空白・記号・句読点は捨てる）。",
+    "正規化した utterance が 4 文字未満なら物音とみなし false。",
+    "reference が空なら true。",
+    "utterance の文字のうち ASCII の英字が半分以上なら単語モード、そうでなければ文字モード。",
+    "文字モード: 正規化した文字列の 2 文字の並びを比べる。単語モード: [a-z0-9]+ で区切った単語の 2 語の並びを比べる（utterance が 1 語なら 1 語で比べる）。reference も同じモードで区切る。",
+    "utterance の並びのうち reference にもある並びの割合が 0.6 以上なら拾い返し（false）、未満なら人の発話（true）。"
+  ],
+  "threshold": 0.6,
+  "minChars": 4,
+  "cases": [
+    { "name": "ja: 読んでいる文の拾い返し", "reference": "明日は晴れです。午後から少し風が強くなります。", "utterance": "午後から少し風が強くなります", "expected": false },
+    { "name": "ja: 拾い返しに認識の誤りが少し混ざる", "reference": "明日は晴れです。午後から少し風が強くなります。", "utterance": "午後から少し風が強くなりま した", "expected": false },
+    { "name": "ja: 割り込み", "reference": "明日は晴れです。午後から少し風が強くなります。", "utterance": "ちょっと待って", "expected": true },
+    { "name": "ja: 割り込み（質問）", "reference": "明日は晴れです。午後から少し風が強くなります。", "utterance": "じゃあ傘はいらない？", "expected": true },
+    { "name": "ja: 4 文字未満は物音", "reference": "明日は晴れです。", "utterance": "えっと", "expected": false },
+    { "name": "en: echo", "reference": "Sure. I will update the config file and restart the server.", "utterance": "i will update the config file", "expected": false },
+    { "name": "en: echo with a misrecognized word", "reference": "Sure. I will update the config file and restart the server.", "utterance": "I will update the conflict file and restart", "expected": false },
+    { "name": "en: barge-in", "reference": "Sure. I will update the config file and restart the server.", "utterance": "hold on a second", "expected": true },
+    { "name": "en: barge-in sharing common words", "reference": "Sure. I will update the config file and restart the server.", "utterance": "no do the upload one", "expected": true },
+    { "name": "en: barge-in", "reference": "Sure. I will update the config file and restart the server.", "utterance": "actually let's do something else", "expected": true },
+    { "name": "en: two words", "reference": "Sure. I will update the config file and restart the server.", "utterance": "wait stop", "expected": true },
+    { "name": "en: one word not in the reply", "reference": "Sure. I will update the config file and restart the server.", "utterance": "stop", "expected": true },
+    { "name": "en: one word echoed", "reference": "Sure. I will update the config file and restart the server.", "utterance": "server", "expected": false },
+    { "name": "empty reference", "reference": "", "utterance": "ちょっと待って", "expected": true },
+    { "name": "punctuation only", "reference": "明日は晴れです。", "utterance": "、。！？", "expected": false }
+  ]
+}

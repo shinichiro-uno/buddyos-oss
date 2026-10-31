@@ -1,0 +1,419 @@
+{
+ "hermes": {
+  "database": "state.db",
+  "table": "async_delegations",
+  "columns": [
+   {
+    "name": "delegation_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": true
+   },
+   {
+    "name": "origin_session",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "origin_ui_session_id",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "parent_session_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "state",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "dispatched_at",
+    "type": "REAL",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "completed_at",
+    "type": "REAL",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "updated_at",
+    "type": "REAL",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "event_json",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "result_json",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "delivery_state",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "delivery_attempts",
+    "type": "INTEGER",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "delivered_at",
+    "type": "REAL",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "owner_pid",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "owner_started_at",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "task_json",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "delivery_claim",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "delivery_claimed_at",
+    "type": "REAL",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "origin_session_id",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   }
+  ],
+  "rows": [
+   {
+    "delegation_id": "deleg_cbe3a7c4",
+    "origin_session": "e8a9db8d-626d-4ad4-bdac-2513b846a8fe",
+    "origin_ui_session_id": "",
+    "parent_session_id": "e8a9db8d-626d-4ad4-bdac-2513b846a8fe",
+    "state": "running",
+    "dispatched_at": 1792582359.428483,
+    "completed_at": null,
+    "updated_at": 1792582383.5279748,
+    "event_json": "{\"type\": \"async_delegation\", \"delegation_id\": \"deleg_cbe3a7c4\", \"session_key\": \"e8a9db8d-626d-4ad4-bdac-2513b846a8fe\", \"origin_ui_session_id\": \"\", \"origin_session_id\": \"\", \"parent_session_id\": \"e8a9db8d-626d-4ad4-bdac-2513b846a8fe\", \"goal\": \"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\", \"goals\": [\"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\"], \"context\": null, \"toolsets\": null, \"role\": \"leaf\", \"model\": null, \"status\": \"running\", \"is_batch\": true, \"live_transcripts\": [\"/Users/me/.hermes/cache/delegation/live/deleg_cbe3a7c4/task-0.log\"], \"error\": null, \"dispatched_at\": 1792582359.428483, \"completed_at\": 1792582383.5279622}",
+    "result_json": null,
+    "delivery_state": "pending",
+    "delivery_attempts": 0,
+    "delivered_at": null,
+    "owner_pid": 44138,
+    "owner_started_at": 179258232746,
+    "task_json": "{\"goal\": \"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\", \"goals\": [\"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\"], \"context\": null, \"toolsets\": null, \"role\": \"leaf\", \"model\": null, \"is_batch\": true}",
+    "delivery_claim": null,
+    "delivery_claimed_at": null,
+    "origin_session_id": ""
+   },
+   {
+    "delegation_id": "deleg_cbe3a7c4",
+    "origin_session": "e8a9db8d-626d-4ad4-bdac-2513b846a8fe",
+    "origin_ui_session_id": "",
+    "parent_session_id": "e8a9db8d-626d-4ad4-bdac-2513b846a8fe",
+    "state": "completed",
+    "dispatched_at": 1792582359.428483,
+    "completed_at": 1792582383.5279622,
+    "updated_at": 1792582383.5279748,
+    "event_json": "{\"type\": \"async_delegation\", \"delegation_id\": \"deleg_cbe3a7c4\", \"session_key\": \"e8a9db8d-626d-4ad4-bdac-2513b846a8fe\", \"origin_ui_session_id\": \"\", \"origin_session_id\": \"\", \"parent_session_id\": \"e8a9db8d-626d-4ad4-bdac-2513b846a8fe\", \"goal\": \"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\", \"goals\": [\"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\"], \"context\": null, \"toolsets\": null, \"role\": \"leaf\", \"model\": null, \"status\": \"completed\", \"is_batch\": true, \"results\": [{\"task_index\": 0, \"status\": \"completed\", \"summary\": \"OK\", \"api_calls\": 2, \"duration_seconds\": 24.08, \"model\": \"gpt-5.6-luna\", \"exit_reason\": \"completed\", \"truncated\": false, \"tokens\": {\"input\": 31018, \"output\": 40}, \"tool_trace\": [{\"tool\": \"terminal\", \"args_bytes\": 68, \"input_summary\": {\"argument_keys\": [\"command\", \"timeout\", \"workdir\"], \"targets\": {}}, \"result_bytes\": 45, \"status\": \"ok\"}], \"cost_usd\": 0.0, \"cost_status\": \"included\", \"live_transcript\": \"/Users/me/.hermes/cache/delegation/live/deleg_cbe3a7c4/task-0.log\"}], \"live_transcripts\": [\"/Users/me/.hermes/cache/delegation/live/deleg_cbe3a7c4/task-0.log\"], \"error\": null, \"total_duration_seconds\": 24.25, \"dispatched_at\": 1792582359.428483, \"completed_at\": 1792582383.5279622}",
+    "result_json": "{\"results\": [{\"task_index\": 0, \"status\": \"completed\", \"summary\": \"OK\", \"api_calls\": 2, \"duration_seconds\": 24.08, \"model\": \"gpt-5.6-luna\", \"exit_reason\": \"completed\", \"truncated\": false, \"tokens\": {\"input\": 31018, \"output\": 40}, \"tool_trace\": [{\"tool\": \"terminal\", \"args_bytes\": 68, \"input_summary\": {\"argument_keys\": [\"command\", \"timeout\", \"workdir\"], \"targets\": {}}, \"result_bytes\": 45, \"status\": \"ok\"}], \"cost_usd\": 0.0, \"cost_status\": \"included\", \"live_transcript\": \"/Users/me/.hermes/cache/delegation/live/deleg_cbe3a7c4/task-0.log\"}], \"total_duration_seconds\": 24.25, \"live_transcripts\": [\"/Users/me/.hermes/cache/delegation/live/deleg_cbe3a7c4/task-0.log\"]}",
+    "delivery_state": "pending",
+    "delivery_attempts": 0,
+    "delivered_at": null,
+    "owner_pid": 44138,
+    "owner_started_at": 179258232746,
+    "task_json": "{\"goal\": \"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\", \"goals\": [\"Run the shell command `sleep 20` in the terminal, then reply with exactly `OK` and nothing else.\"], \"context\": null, \"toolsets\": null, \"role\": \"leaf\", \"model\": null, \"is_batch\": true}",
+    "delivery_claim": null,
+    "delivery_claimed_at": null,
+    "origin_session_id": ""
+   }
+  ],
+  "note": "rows[0] は running の形（completed 行から completed_at・results・result_json を除いて作った）、rows[1] は実測の completed"
+ },
+ "openclaw": {
+  "database": "state/openclaw.sqlite",
+  "table": "task_runs",
+  "columns": [
+   {
+    "name": "task_id",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": true
+   },
+   {
+    "name": "runtime",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "task_kind",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "source_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "requester_session_key",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "owner_key",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "scope_kind",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "child_session_key",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "parent_flow_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "parent_task_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "agent_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "requester_agent_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "run_id",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "label",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "task",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "status",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "delivery_status",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "notify_policy",
+    "type": "TEXT",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "created_at",
+    "type": "INTEGER",
+    "notnull": true,
+    "pk": false
+   },
+   {
+    "name": "started_at",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "ended_at",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "last_event_at",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "cleanup_after",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "tool_use_count",
+    "type": "INTEGER",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "last_tool_name",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "error",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "progress_summary",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "terminal_summary",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "terminal_outcome",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   },
+   {
+    "name": "detail_json",
+    "type": "TEXT",
+    "notnull": false,
+    "pk": false
+   }
+  ],
+  "rows": [
+   {
+    "task_id": "ec1077ce-4ffd-4c96-b7c0-86810a4c3d4d",
+    "runtime": "subagent",
+    "task_kind": null,
+    "source_id": "4fcca178-5f28-48a1-aed4-9de0fcf4d69c",
+    "requester_session_key": "agent:main:probe-r3",
+    "owner_key": "agent:main:probe-r3",
+    "scope_kind": "session",
+    "child_session_key": "agent:main:subagent:49bc8f60-241c-4237-a1e5-57845765a558",
+    "parent_flow_id": "e18869d5-89c7-4960-8cfb-9287a9c9d1a6",
+    "parent_task_id": null,
+    "agent_id": "main",
+    "requester_agent_id": "main",
+    "run_id": "4fcca178-5f28-48a1-aed4-9de0fcf4d69c",
+    "label": "probe-sleep",
+    "task": "Run the shell command 'sleep 20' and then reply with exactly OK.",
+    "status": "succeeded",
+    "delivery_status": "delivered",
+    "notify_policy": "done_only",
+    "created_at": 1792583110356,
+    "started_at": 1792583110551,
+    "ended_at": 1792583120918,
+    "last_event_at": 1792583120918,
+    "cleanup_after": 1793187920918,
+    "tool_use_count": 1,
+    "last_tool_name": "exec",
+    "error": null,
+    "progress_summary": "OK",
+    "terminal_summary": null,
+    "terminal_outcome": null,
+    "detail_json": "{\"kind\":\"task_backing_instance\",\"runtime\":\"subagent\",\"generation\":1}"
+   },
+   {
+    "task_id": "cf43d283-5382-4e50-bd15-85814537fbb5",
+    "runtime": "cli",
+    "task_kind": "exec",
+    "source_id": "lucky-lobster",
+    "requester_session_key": "agent:main:subagent:49bc8f60-241c-4237-a1e5-57845765a558",
+    "owner_key": "agent:main:subagent:49bc8f60-241c-4237-a1e5-57845765a558",
+    "scope_kind": "session",
+    "child_session_key": null,
+    "parent_flow_id": null,
+    "parent_task_id": null,
+    "agent_id": "main",
+    "requester_agent_id": "main",
+    "run_id": "exec:lucky-lobster",
+    "label": "CLI command",
+    "task": "Background CLI command",
+    "status": "succeeded",
+    "delivery_status": "not_applicable",
+    "notify_policy": "silent",
+    "created_at": 1792583110693,
+    "started_at": 1792583110693,
+    "ended_at": 1792583130872,
+    "last_event_at": 1792583130872,
+    "cleanup_after": 1793187930872,
+    "tool_use_count": null,
+    "last_tool_name": null,
+    "error": null,
+    "progress_summary": "Command running",
+    "terminal_summary": "Command completed",
+    "terminal_outcome": null,
+    "detail_json": "{\"exitCode\":0}"
+   }
+  ]
+ }
+}

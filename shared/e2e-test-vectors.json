@@ -1,0 +1,223 @@
+{
+  "comment": "BuddyOS E2E 相互運用テストベクタ (docs/E2E_ENCRYPTION_DESIGN.md §3-4)。鍵ペアは RFC 7748 §6.1 (bridge=Alice, device=Bob)。生成元: mac-bridge/Tests/BridgeAppTests/E2ECryptoTests.swift testGenerateVectors（keys/ws/push のみ。tunnelV2 は testGenerateVectors が出力しないので、同じ鍵ペアで別に計算して手で追記した。出力を貼り直すときは tunnelV2・tunnelV3・pairingV3 を消さないこと。tunnelV3・pairingV3 は docs/DEVICE_AUTH_REDESIGN_2026-10-12.md §7 の固定値で、確かめ役は shared/tools/check-tunnel-v3.mts）",
+  "keys": {
+    "bridgePriv": "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a",
+    "bridgePub": "8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a",
+    "devicePriv": "5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb",
+    "devicePub": "de9edb7d7b7dc1b4d35b61c2ece435373f8343c85b78674dadfc7e146f882b4f",
+    "sharedSecret": "4a5d9d5ba4ce2de1728e3bf480350f25e07e21c947d19e3376f09b3c1e161742"
+  },
+  "ws": {
+    "connSalt": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "kC2S": "2fed6116a90e388cb8f0b2aaa94e3fdab67fa83d54c60208b7063ef2da97bfd7",
+    "kS2C": "aebe595e376deb4c7566843f025b67f0bfd83b5ac911fa85e5b1407086a33c31",
+    "frames": [
+      {"direction": "c2s", "seq": 1, "plaintext": "{\"type\":\"e2e_confirm\"}", "frame": "010000000000000000018b35440da44afabb20c06630cb4d7d19d0c52b412cb78c352e431af7b7a5f468b941a6707f7f"},
+      {"direction": "c2s", "seq": 2, "plaintext": "{\"type\":\"user_message\",\"content\":\"こんにちは\"}", "frame": "010000000000000000023dccec33c640a3cab14fcd574a28937375883786d59c4335a31704b8f6c29eeae50cbafd63d9f64143ddf15dc993df315041b60b509a934979c93c03a9b75f35431e42"},
+      {"direction": "s2c", "seq": 1, "plaintext": "{\"type\":\"assistant_delta\",\"content\":\"Hello\"}", "frame": "01000000000000000001f084ed0dfe5c79f35d4f299f4c8158e60649584524272ff20e0cd95b44514fb6b5cdfee1406c7352c5de866d2f55987f18e5abba35a5d0148e9096e8"},
+      {"direction": "c2s", "seq": 4294967297, "plaintext": "{\"type\":\"ping\"}", "frame": "010000000001000000014e09d280f72bc02f3167a005ee6835d9aadeef57799f93baa23f7786f702b5"}
+    ]
+  },
+  "tunnelV2": {
+    "comment": "Paseo トンネル v2（buddyos_tunnel_init/hello の v=2）。connSalt = serverSalt(hello.salt, 32B) || clientNonce(init.clientNonce, 32B) の 64B で deriveWSKeys する。info は ws と同じ buddyos/ws/v1/c2s|s2c。serverSalt は ws.connSalt と同値（clientNonce で鍵が変わることの確認用）、clientNonce は 0x20..0x3f。ペアリング済みの device 鍵で接続するクライアント（iOS）は v=2 以外の hello を拒否する（fail-closed）。旧方式（v なし、connSalt = salt のみ）へ落とすと、relay が同じ salt の v なし hello を複数の接続に返すだけで同じ鍵・nonce を使い回させられるため。Bridge は v なしの init（旧 iOS）には salt のみで応じる（salt は Bridge が接続ごとに生成するので、Bridge 側の鍵は重複しない）",
+    "serverSalt": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "clientNonce": "202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+    "connSalt": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+    "kC2S": "c5c8e1ee1545d602f8ed7b0cd01bb890521c057c1d776b79b017ecacd6d0189b",
+    "kS2C": "8b83b77fcab39b05a79a68c35a631a8fe26181a6586a3d146a621050ca091667"
+  },
+  "push": {
+    "bridgeId": "bridge-test-1",
+    "deviceId": "device-test-1",
+    "kPush": "2695b89849b5aa2ef9dd13b67aa18c4dca1f6c8e5ac105fd7756b8bcab569490",
+    "vectors": [
+      {"nonce": "000102030405060708090a0b", "plaintext": "{\"title\":\"BuddyOS\",\"body\":\"応答が完了しました\",\"payload\":{\"kind\":\"done\",\"sessionId\":\"s-1\"}}", "ciphertext": "2bd39c06bb685e666a33d2791bdf9a347fbc276ce4d548e781170f7e89f9b248cf0f429f08a089c276bfc8cce3fc8d2f1afb98a2bd39d3a2a049bba69af26dab177e4396be1262967a9eade31661a0ebb4de58c25b29454afbc2651a0a21cc945fd90349a9266503abd51aca1b42d74a16c8d801"}
+    ]
+  },
+  "tunnelV3": {
+    "comment": "Paseo トンネル v3（Noise_IKpsk2_25519_ChaChaPoly_SHA256。docs/DEVICE_AUTH_REDESIGN_2026-10-12.md §4.2・§7）。静的鍵は keys と同じ（bridge=Alice、device=Bob）。一時鍵は固定値（本番は接続ごとに乱数）。payload1・payload2・frames[].plaintext はこのバイト列をそのまま使う（JSON を組み直さない）。frames は v3 フレーム（先頭 0x03、nonce は 0 が 4 バイト + seq の BE 8 バイト、AAD はヘッダ 10 バイト）。connect と approve は一時鍵と psk が同じなので kC2S/kS2C も同じになる（Split は ck だけで決まる。違うのは handshakeHash）。生成元: docs の付録 A の参照実装。Noise 公式ベクタ（cacophony の Noise_IKpsk2_25519_ChaChaPoly_SHA256）でも一致を確かめてある",
+    "protocolName": "Noise_IKpsk2_25519_ChaChaPoly_SHA256",
+    "prologue": "buddyos-tunnel-v3",
+    "deviceEphemeralPriv": "a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebf",
+    "bridgeEphemeralPriv": "c0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedf",
+    "deviceKeyId": "815WFhYKML88bnn6c8V21A",
+    "connect": {
+      "psk": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload1": "{\"mode\":\"connect\",\"deviceId\":\"device-test-1\",\"name\":\"Test iPhone\",\"platform\":\"ios\",\"app\":\"131\"}",
+      "init": {
+        "type": "buddyos_tunnel_init",
+        "v": 3,
+        "e": "YFpyXSpK3-6xop4X7dYhwbdZPujNvESsbEq24vgF0jw",
+        "s": "uAMn8_Sur6D5IBvZJb0lEBNFcL_u0kbxWJ3kEdXO113WmnxfAHHCNKE6Xbcdk4e7",
+        "p": "WFi7SaaV6u0EF8xsmuvpWTqcDK4hPfX10RWX8CBX_Bcd0oflJrF9_jpB8smvJNRw47G7aOnhvDtyy1d6Dop5O1xglPHvRAuOE-S6dku5ZpayJLK4haRiYxj7qWnUEM_l7z3NQUu_1Uqz1t-atgGm"
+      },
+      "payload2": "{\"ok\":true,\"bridgeId\":\"bridge-test-1\",\"name\":\"Test Mac\",\"platform\":\"mac\",\"deviceKeyId\":\"815WFhYKML88bnn6c8V21A\"}",
+      "hello": {
+        "type": "buddyos_tunnel_hello",
+        "v": 3,
+        "e": "3CzKMejkO72R3_fkdcyjNH60eBB9W9dlq6SuSjDDXUQ",
+        "p": "PE1JQjWgeIx19gARnw7lgorXtILPEoFEdhHNZDjLHYfhUJspgg3CgnpVK_WTcHKqhTm6SQOSiuVEpgCmk75ikgZOPyXYouSWQ4pEmAUr6f9QbRFoIB5btRk7fSL44o41bV5fNwSfH2f7v-76pyq3-6DRVY7p5xUWiVoabeyn7WQ"
+      },
+      "handshakeHash": "74717058249999370b78f0cefa39d8e8771386ea633188f7c88a596eb261c83a",
+      "kC2S": "49a2cfb58a206bc06303ec4110059eae1e5c0ee6bb71e0794b9811406591b8f9",
+      "kS2C": "992adf9749ad2fac8410cbd7a47324deda13a09d49eabacfcf3bb751f07deca6",
+      "frames": [
+        {
+          "direction": "c2s",
+          "seq": 1,
+          "plaintext": "{\"type\":\"open\"}",
+          "frame": "030000000000000000016a0fd75950de047e92320eec363b3f5ae5dddd360890b1bc96211b948fe8f6"
+        },
+        {
+          "direction": "c2s",
+          "seq": 2,
+          "plaintext": "GET /health HTTP/1.1\r\nHost: 127.0.0.1\r\nAuthorization: Bearer bdc_test\r\n\r\n",
+          "frame": "030000000000000000021a698ae02cdbe759cc4954c6fb56ebe62a6fc0db6157c09447f017432e6f4a0774cdb9e053efa76c5ec7cc3d214acbc714dddddfe375eaa6bdf3855736ada2585c02848f4ec1c2b29c4834cc90e72c03c6f6204d1b906b8951"
+        },
+        {
+          "direction": "s2c",
+          "seq": 1,
+          "plaintext": "HTTP/1.1 401 Unauthorized\r\ncontent-length: 0\r\n\r\n",
+          "frame": "03000000000000000001e44b63fbb7d6de0768fae55729b7a6f99f929e19433e072e7a5c7040a3dc0183db8442d7217684002bd69f3b19197f4eefddb3ee3384d06d954d24b8a48d3b88"
+        }
+      ]
+    },
+    "pair": {
+      "inviteSecret": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "inviteSecretB64u": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "inviteId": "mkRGFvA3Frl-CILJTpPDtw",
+      "psk": "cb6f52e234ab1f29617617e0e9dccb9ddee99fb534299fae5de9af48770eecac",
+      "payload1": "{\"mode\":\"pair\",\"deviceId\":\"device-test-1\",\"name\":\"Test iPhone\",\"platform\":\"ios\",\"app\":\"131\",\"invite\":\"mkRGFvA3Frl-CILJTpPDtw\"}",
+      "init": {
+        "type": "buddyos_tunnel_init",
+        "v": 3,
+        "e": "YFpyXSpK3-6xop4X7dYhwbdZPujNvESsbEq24vgF0jw",
+        "s": "uAMn8_Sur6D5IBvZJb0lEBNFcL_u0kbxWJ3kEdXO113WmnxfAHHCNKE6Xbcdk4e7",
+        "p": "WFi7SaaV6u0EBMJrhqymD3zVWKMnLtXylmbRtn8D8REOlpDleLE1vGxA4YXia98ztPbNN7jB-SFWg1FEA8c7fA4g1_XlSg2FXqz1PR7oLdXjZ-7qxu4wcBHounbHW9xg6l8nyXDS96NAOrTadZ7j7YVH0hs8H8nGVmJKzALc7vg8xWfMU5BCWwPB08FZbA"
+      },
+      "payload2": "{\"ok\":true,\"bridgeId\":\"bridge-test-1\",\"name\":\"Test Mac\",\"platform\":\"mac\",\"deviceKeyId\":\"815WFhYKML88bnn6c8V21A\"}",
+      "hello": {
+        "type": "buddyos_tunnel_hello",
+        "v": 3,
+        "e": "3CzKMejkO72R3_fkdcyjNH60eBB9W9dlq6SuSjDDXUQ",
+        "p": "haf2N9lfMD0CzzMsOfimu7gw5E2VrGHrHuTUb5Z4Xn5KAYorBYd6G_TD3pDQup3ETP_VpKOLDUYPcazGyarhwE_ep8U33fv5zOsYiC3u8U6lR_orczljOWKqnlDsmbUnypeoM6qqOVYnrQTT1wWSHUjhIsnBoDXGAtRiy6MebLg"
+      },
+      "handshakeHash": "bfb643d3c7504003bb97213711f5eeb5fe3aa6ed8c26ab2c04bf2d994031fb1b",
+      "kC2S": "724ce6a0f7e39b35dc26a11e57e632857506b6181c0f6486b6f528a4613bf155",
+      "kS2C": "8c00a7348df9a6955d522c73560d61ff18aecb5b07ed11f181c64db9ac47d1ad",
+      "frames": [
+        {
+          "direction": "c2s",
+          "seq": 1,
+          "plaintext": "{\"type\":\"pair_confirm\"}",
+          "frame": "03000000000000000001e9e59598924968cc8a230d00beebc7000b007d6c6051e2b0b32382c4f981fb184dab40813b56b8"
+        },
+        {
+          "direction": "s2c",
+          "seq": 1,
+          "plaintext": "{\"type\":\"paired\",\"deviceKeyId\":\"815WFhYKML88bnn6c8V21A\",\"credential\":\"bdc_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl8\",\"bridge\":{\"bridgeId\":\"bridge-test-1\",\"name\":\"Test Mac\",\"platform\":\"mac\",\"relayId\":\"4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8\",\"relayURL\":\"wss://relay.paseo.sh/ws\"}}",
+          "frame": "0300000000000000000180501ab47fa0b9c25795297fde9fa00830d731b21dd8a7f56be108f07a96759aa676f6ce377924a65333b26501044daeba59a0955a01c5516d856adad3e7437f339b8b3dc7db706ac1532a371c9bb082c6fc9aeb872e7f0fc0b27044900515535da004161ae93341fe942d7550fdb211a49b4e9279757b2d7e2d0ae63b3047a06ccab1fb58ffc3d66c29b5abe58de1e609a7fe7e966aaa16d3fdb226be00970a67c01a03dea97ca69fc77aea9e46a0c2b9d367b213eb6fc6ac6ee331320635b62b8311e79a78b4f75c464dcc367cf3bf6a132dc7f70631a2943073dff3b11d4130da5f8ca6f3eddff2aa61c7aa835c4d7304cdf6053c031de9cf1ef7b195aac759fe6d08eb0d09c3cd4ab45fd5636bd36808b9f6467ce79d5519b130248adedf19d9528785652d690c0fade9b2"
+        }
+      ],
+      "credential": "bdc_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl8",
+      "credentialHash": "3086e28b59916fe8793e27f53ba5ac075fa4e3ae6563d3d5fc519a800785ca09",
+      "negative": "psk を 0 埋め（招待を知らない）で始めた端末は hello.p を開けない（復号失敗）こと"
+    },
+    "approve": {
+      "nI": "808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f",
+      "nR": "606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
+      "commit": "7e8a90c6fba76c36d6f7f5d85301f1e8a4e36b9ec60181074a81783d86ec253c",
+      "psk": "0000000000000000000000000000000000000000000000000000000000000000",
+      "payload1": "{\"mode\":\"approve\",\"deviceId\":\"device-test-1\",\"name\":\"Test iPhone\",\"platform\":\"ios\",\"app\":\"131\"}",
+      "init": {
+        "type": "buddyos_tunnel_init",
+        "v": 3,
+        "e": "YFpyXSpK3-6xop4X7dYhwbdZPujNvESsbEq24vgF0jw",
+        "s": "uAMn8_Sur6D5IBvZJb0lEBNFcL_u0kbxWJ3kEdXO113WmnxfAHHCNKE6Xbcdk4e7",
+        "p": "WFi7SaaV6u0EFdNyhuH8SDqcDK4hPfX10RWX8CBX_Bcd0oflJrF9_jpB8smvJNRw47G7aOnhvDtyy1d6Dop5O1xglPHvRAuOE-S6dku5ZpayJLK4haRiYxj7qWnUEM-hSYkz67HVxqu98YhFeuIy"
+      },
+      "payload2": "{\"ok\":true,\"bridgeId\":\"bridge-test-1\",\"name\":\"Test Mac\",\"platform\":\"mac\",\"deviceKeyId\":\"815WFhYKML88bnn6c8V21A\",\"commit\":\"foqQxvunbDbW9_XYUwHx6KTja57GAYEHSoF4PYbsJTw\"}",
+      "hello": {
+        "type": "buddyos_tunnel_hello",
+        "v": 3,
+        "e": "3CzKMejkO72R3_fkdcyjNH60eBB9W9dlq6SuSjDDXUQ",
+        "p": "PE1JQjWgeIx19gARnw7lgorXtILPEoFEdhHNZDjLHYfhUJspgg3CgnpVK_WTcHKqhTm6SQOSiuVEpgCmk75ikgZOPyXYouSWQ4pEmAUr6f9QbRFoIB5btRk7fSL44o41bV5fNwSfH2f7v-76pyq3qmRnsAbSYyCmp04EvfAivoPUe9OScOHO9O3jQ9FPRQIl6c2Sq703jTtQxnY1tPAATtnXSHvE5z4QUyuRXHqL5AzjR5_phwe1"
+      },
+      "handshakeHash": "479bb525d0631d943aa3088c0dfd1fc7afd36bc872fc02e0df1da68724dbc6fc",
+      "kC2S": "49a2cfb58a206bc06303ec4110059eae1e5c0ee6bb71e0794b9811406591b8f9",
+      "kS2C": "992adf9749ad2fac8410cbd7a47324deda13a09d49eabacfcf3bb751f07deca6",
+      "frames": [
+        {
+          "direction": "c2s",
+          "seq": 1,
+          "plaintext": "{\"type\":\"approve_nonce\",\"n\":\"gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp8\"}",
+          "frame": "030000000000000000016a0fd75950de047e923c0ef92a7634b2115e31dae356aab224899516b6b9b785ac941e987f102bd147239635b786c464c713578ab60f474c9b45d249cdb0c017056385933e52c25ec9dd9bae87875941e59cf8ade85cea7855ec"
+        },
+        {
+          "direction": "s2c",
+          "seq": 1,
+          "plaintext": "{\"type\":\"approve_reveal\",\"n\":\"YGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn8\"}",
+          "frame": "03000000000000000001d73d43d2e882d20c6aafa5167b8dbefdb59493005436116932731401f6902ca1f39936891674b9192783de5c6461100357d4cc5aff3a9d2e088c1646d2db139fb838ccdb53e907b5b5b189560a2d8b30b6e81e9452f258305e84cd"
+        }
+      ],
+      "sas": "213854"
+    }
+  },
+  "pairingV3": {
+    "comment": "端末認証 v3 のペアリングまわりの規則（docs/DEVICE_AUTH_REDESIGN_2026-10-12.md §4.0・§4.1・§4.2.8）。nameSanitize は §4.0.2、b64u は §4.0.1 の厳しい読み方、qrName / qrUrl は §4.0.3 の符号化、displayName は §4.0.2 の表示名、codeInput は §4.4.2 の入力の正規化。生成元: docs の付録 A.2",
+    "nameSanitize": {
+      "deviceFallback": "端末",
+      "bridgeFallback": "PC",
+      "cases": [
+        {"in": "  MacBook   Pro  ", "out": "MacBook Pro"},
+        {"in": "iPhone\u0000\u0007 15", "out": "iPhone 15"},
+        {"in": "a\u0009b\u000Ac\u000D\u000Ad", "out": "a b c d"},
+        {"in": "Evil\u202Egnp.exe", "out": "Evilgnp.exe"},
+        {"in": "A\u2028B\u2029C", "out": "A B C"},
+        {"in": "\u3000全角\u3000\u3000空白\u3000", "out": "全角 空白"},
+        {"in": "x\u200By\u00ADz\uFEFF", "out": "xyz"},
+        {"in": "\u2066Mac\u2069\u200E", "out": "Mac"},
+        {"in": "👨\u200D👩\u200D👧", "out": "👨👩👧"},
+        {"in": "\u00A0\u0009", "out": "端末"},
+        {"in": "ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ", "out": "ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ"},
+        {"in": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀b", "out": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀"},
+        {"in": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa b", "out": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+        {"in": "Mac + Pro & 100%", "out": "Mac + Pro & 100%"}
+      ]
+    },
+    "displayName": [
+      {"name": "iPhone", "deviceKeyId": "815WFhYKML88bnn6c8V21A", "display": "iPhone · 815W"}
+    ],
+    "b64u": [
+      {"in": "AAECAw", "hex": "00010203"},
+      {"in": "AAE", "hex": "0001"},
+      {"in": "AAECAwQ", "hex": "0001020304"},
+      {"in": "", "hex": ""},
+      {"in": "AAECAw==", "hex": null},
+      {"in": "AAEC Aw", "hex": null},
+      {"in": "AAECA+", "hex": null},
+      {"in": "AAF", "hex": null},
+      {"in": "A", "hex": null}
+    ],
+    "qrName": {"in": "Mac + Pro & 100%/é", "encoded": "Mac%20%2B%20Pro%20%26%20100%25%2F%C3%A9"},
+    "qrUrl": {
+      "fields": {
+        "v": "3", "bridgeId": "bridge-test-1", "name": "Test Mac + 2", "platform": "mac",
+        "relay": "wss://relay.paseo.sh/ws", "relayId": "4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8",
+        "key": "hSDwCYkwp1R0i33ctD73Wg2_Og0mOBr066SpjqqbTmo", "secret": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+        "exp": "1789000600"
+      },
+      "url": "buddyos://pair?v=3&bridgeId=bridge-test-1&name=Test%20Mac%20%2B%202&platform=mac&relay=wss%3A%2F%2Frelay.paseo.sh%2Fws&relayId=4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8&key=hSDwCYkwp1R0i33ctD73Wg2_Og0mOBr066SpjqqbTmo&secret=AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8&exp=1789000600",
+      "plusIsLiteral": {"url": "buddyos://pair?name=Test+Mac", "name": "Test+Mac"}
+    },
+    "sasDisplay": {"code": "213854", "display": "213 854"},
+    "codeInput": [
+      {"in": "213854", "normalized": "213854"},
+      {"in": "213 854", "normalized": "213854"},
+      {"in": "213-854", "normalized": "213854"},
+      {"in": "21385", "normalized": null},
+      {"in": "2138540", "normalized": null},
+      {"in": "２１３８５４", "normalized": null}
+    ]
+  }
+}

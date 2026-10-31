@@ -1,0 +1,65 @@
+{
+  "_readme": "home/ を HOME（~/.codex は home/.codex）として読んだときに両 Bridge が出すべきもの。イベントは部分一致（ここに書いたキーだけ比べる）。並びは sessionId / name の昇順にそろえて比べる。",
+  "listSessions": {
+    "_note": "list_sessions_request（cwd 無し）の session_list_item。000…003（source.subagent）と 000…004（注入された文脈だけ）は出ない",
+    "events": [
+      {
+        "type": "session_list_item",
+        "agentId": "codex",
+        "sessionId": "0199a1b2-0000-7000-8000-000000000001",
+        "metadata": {
+          "title": "README の修正",
+          "lastActive": "2026-10-01T09:05:30.000Z",
+          "messageCount": "4",
+          "cwd": "/home/user/projects/sample-app"
+        }
+      },
+      {
+        "type": "session_list_item",
+        "agentId": "codex",
+        "sessionId": "0199a1b2-0000-7000-8000-000000000002",
+        "metadata": {
+          "title": "Please refactor the settings screen so that every toggle uses the shared Row ...",
+          "lastActive": "2026-10-02T10:00:09.000Z",
+          "messageCount": "2",
+          "cwd": "/home/user/projects/other-app"
+        }
+      }
+    ]
+  },
+  "listSessionsByCwd": {
+    "_note": "cwd = /home/user/projects/other-app で絞ったときの sessionId",
+    "cwd": "/home/user/projects/other-app",
+    "sessionIds": ["0199a1b2-0000-7000-8000-000000000002"]
+  },
+  "loadHistory": {
+    "_note": "load_history_request の history_message。注入された文脈（<user_instructions> / # AGENTS.md instructions / <environment_context>）・推論・ツール呼び出し・token_count・壊れた行は出ない。event_msg と response_item の同じ発言は 1 つにまとめる。output_text が複数なら改行でつなぐ",
+    "sessionId": "0199a1b2-0000-7000-8000-000000000001",
+    "events": [
+      {"type": "history_message", "agentId": "codex", "sessionId": "0199a1b2-0000-7000-8000-000000000001", "messageId": "0199a1b2-0000-7000-8000-000000000001-0", "content": "README の見出しを直して", "metadata": {"role": "user"}},
+      {"type": "history_message", "agentId": "codex", "sessionId": "0199a1b2-0000-7000-8000-000000000001", "messageId": "0199a1b2-0000-7000-8000-000000000001-1", "content": "見出しを「使い方」に直しました。", "metadata": {"role": "assistant"}},
+      {"type": "history_message", "agentId": "codex", "sessionId": "0199a1b2-0000-7000-8000-000000000001", "messageId": "0199a1b2-0000-7000-8000-000000000001-2", "content": "ありがとう。\nテストも走らせて", "metadata": {"role": "user"}},
+      {"type": "history_message", "agentId": "codex", "sessionId": "0199a1b2-0000-7000-8000-000000000001", "messageId": "0199a1b2-0000-7000-8000-000000000001-3", "content": "テストを実行しました。\n全て通りました。", "metadata": {"role": "assistant"}}
+    ]
+  },
+  "mcpList": {
+    "_note": "home/.codex/config.toml の mcp_server_item（name と transport）。サブテーブル（.env / .tools）は別のサーバにしない。ヘッダ行末のコメントとクォート付きの名前を読む",
+    "items": [
+      {"name": "docs", "transport": "npx -y @example/docs-mcp"},
+      {"name": "team.wiki", "transport": "https://mcp.example.com/wiki"}
+    ]
+  },
+  "mcpRegister": {
+    "_note": "元の config.toml に 2 つを順に登録した結果が config.after-register.toml と完全一致する（末尾へ空行 + ブロックを足す。env はキー順）",
+    "specs": [
+      {"serverName": "local-files", "transportKind": "command", "command": "node", "args": ["server.js", "--root", "C:\\work\\\"quoted\""], "authType": "none", "env": {"B_KEY": "2", "A_KEY": "1"}},
+      {"serverName": "remote-search", "transportKind": "url", "url": "https://mcp.example.com/search", "args": [], "authType": "none", "env": {}}
+    ],
+    "expectedFile": "config.after-register.toml"
+  },
+  "mcpDelete": {
+    "_note": "元の config.toml から docs を消した結果が config.after-delete.toml と完全一致する（離れた位置のサブテーブルも消す。他のコメントは残す）",
+    "serverName": "docs",
+    "expectedFile": "config.after-delete.toml"
+  }
+}

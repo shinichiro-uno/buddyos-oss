@@ -1,0 +1,13 @@
+# Codex の設定（BuddyOS の共有テスト用の合成データ。実在の設定ではない）
+model = "gpt-5.5-codex"
+model_reasoning_effort = "medium"  # 行末のコメント
+
+[profiles.fast]
+model = "gpt-5.5-mini"
+
+# よく使う MCP サーバ（このコメントは残る）
+[mcp_servers."team.wiki"] # クォート付きの名前（ドットを含む）
+url = "https://mcp.example.com/wiki"
+
+[projects."/home/user/projects/sample-app"]
+trust_level = "trusted"

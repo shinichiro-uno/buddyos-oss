@@ -1,0 +1,17 @@
+{"timestamp":"2026-10-01T09:00:00.000Z","type":"session_meta","payload":{"id":"0199a1b2-0000-7000-8000-000000000001","timestamp":"2026-10-01T09:00:00.000Z","cwd":"/home/user/projects/sample-app","originator":"codex_cli_rs","cli_version":"0.50.0","source":"cli","model_provider":"openai"}}
+{"timestamp":"2026-10-01T09:00:01.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"<user_instructions>\n日本語で答えてください。\n</user_instructions>"}]}}
+{"timestamp":"2026-10-01T09:00:01.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"# AGENTS.md instructions\n\nテストを先に書く。"}]}}
+{"timestamp":"2026-10-01T09:00:01.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"<environment_context>\n  <cwd>/home/user/projects/sample-app</cwd>\n</environment_context>"}]}}
+{"timestamp":"2026-10-01T09:00:02.000Z","type":"turn_context","payload":{"cwd":"/home/user/projects/sample-app","approval_policy":"on-request","sandbox_policy":{"mode":"workspace-write"},"model":"gpt-5.5-codex","effort":"medium","summary":"auto"}}
+{"timestamp":"2026-10-01T09:00:02.000Z","type":"event_msg","payload":{"type":"user_message","message":"README の見出しを直して","images":[]}}
+{"timestamp":"2026-10-01T09:00:02.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"README の見出しを直して"}]}}
+{"timestamp":"2026-10-01T09:00:03.000Z","type":"event_msg","payload":{"type":"agent_reasoning","text":"README を読む"}}
+{"timestamp":"2026-10-01T09:00:03.000Z","type":"response_item","payload":{"type":"reasoning","summary":[{"type":"summary_text","text":"README を読む"}],"content":null,"encrypted_content":null}}
+{"timestamp":"2026-10-01T09:00:04.000Z","type":"response_item","payload":{"type":"function_call","name":"shell","arguments":"{\"command\":[\"cat\",\"README.md\"]}","call_id":"call_0001"}}
+{"timestamp":"2026-10-01T09:00:05.000Z","type":"response_item","payload":{"type":"function_call_output","call_id":"call_0001","output":"{\"output\":\"# sample\\n\",\"metadata\":{\"exit_code\":0}}"}}
+{"timestamp":"2026-10-01T09:00:06.000Z","type":"event_msg","payload":{"type":"agent_message","message":"見出しを「使い方」に直しました。"}}
+{"timestamp":"2026-10-01T09:00:06.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"見出しを「使い方」に直しました。"}]}}
+{"timestamp":"2026-10-01T09:00:07.000Z","type":"event_msg","payload":{"type":"token_count","info":null,"rate_limits":null}}
+this line is not json
+{"timestamp":"2026-10-01T09:05:00.000Z","type":"event_msg","payload":{"type":"user_message","message":"ありがとう。\nテストも走らせて","images":[]}}
+{"timestamp":"2026-10-01T09:05:30.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"テストを実行しました。"},{"type":"output_text","text":"全て通りました。"}]}}

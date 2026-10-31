@@ -1,0 +1,4 @@
+{"t":1792582322862,"start":true,"since":1792582322,"dbPath":"/Users/me/.hermes/state.db"}
+{"t":1792582359963,"row":{"delegation_id":"deleg_cbe3a7c4","origin_session":"e8a9db8d-626d-4ad4-bdac-2513b846a8fe","origin_ui_session_id":"","origin_session_id":"","parent_session_id":"e8a9db8d-626d-4ad4-bdac-2513b846a8fe","state":"running","dispatched_at":1792582359.428483,"completed_at":null,"updated_at":1792582359.4285061,"delivery_state":"pending","delivery_attempts":0,"delivered_at":null,"owner_pid":44138}}
+{"t":1792582384037,"row":{"delegation_id":"deleg_cbe3a7c4","origin_session":"e8a9db8d-626d-4ad4-bdac-2513b846a8fe","origin_ui_session_id":"","origin_session_id":"","parent_session_id":"e8a9db8d-626d-4ad4-bdac-2513b846a8fe","state":"completed","dispatched_at":1792582359.428483,"completed_at":1792582383.5279622,"updated_at":1792582383.5279748,"delivery_state":"pending","delivery_attempts":0,"delivered_at":null,"owner_pid":44138}}
+{"t":1792582653354,"end":true}
